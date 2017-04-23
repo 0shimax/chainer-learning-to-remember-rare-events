@@ -17,7 +17,7 @@ base_params = get_base_params()
 debug_mode = False
 converse_gray = False
 detect_edge = False
-in_ch = calculate_in_ch(converse_gray, detect_edge)
+in_ch = 1  # calculate_in_ch(converse_gray, detect_edge)
 generate_comment = False
 crop = False
 resize = True
@@ -26,7 +26,7 @@ gpu = -1 if platform.system()==base_params.local_os_name else 1
 # 'squeeze_net_dilate', 'squeeze_net_external_memory',
 # 'squeeze_net_with_feature_vals', 'squeeze_net_external_long_term_memory'
 use_net = 'squeeze_net_external_long_term_memory'
-n_class = 19  # number of class is 2, if you use ne_class classifier.
+n_class = 10  # number of class is 2, if you use ne_class classifier.
 crop_size = 352
 normalize_type = 'LCN'  # 'ZCA', 'LCN', 'SLT'
 im_norm_type = set_normalizer(normalize_type)
@@ -39,9 +39,9 @@ initial_model = os.path.join( \
 resume = os.path.join( \
     base_params.data_root_path+'/results'+'/'+use_net+experiment_criteria, \
     'snapshot_iter_xxx')
-aug_flags = {'do_scale':True, 'do_flip':True,
+aug_flags = {'do_scale':False, 'do_flip':False,
              'change_britghtness':False, 'change_contrast':False,
-             'do_shift':True, 'do_rotate':True,
+             'do_shift':False, 'do_rotate':False,
              'do_blur':False}
 
 # aug_flags = {'do_scale':False, 'do_flip':False,

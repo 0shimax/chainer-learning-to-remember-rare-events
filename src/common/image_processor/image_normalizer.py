@@ -1,5 +1,4 @@
 import sys
-sys.path.append('./src/common/image_processor/shearlet_transfer')
 import cv2
 import numpy as np
 from sklearn.decomposition import PCA
@@ -8,9 +7,6 @@ from sklearn.utils.extmath import svd_flip
 from sklearn.utils.extmath import fast_dot
 from sklearn.utils import check_array
 from math import sqrt
-
-from _inverse_shearlet_transform_spect import inverse_shearlet_transform_spect
-from _shearlet_transform_spect import shearlet_transform_spect
 
 
 class ImageNormalizer(object):
@@ -77,22 +73,3 @@ class ImageNormalizer(object):
         mean = np.mean(image)
         var = np.var(image)
         return (image-mean)/float(sqrt(var))
-
-    def shearlet_transform(self, image, args=None):
-        def __restoration(im2d, st, psi):
-            # cv2.imshow('raw image', st[...,40])
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
-            # xx = inverse_shearlet_transform_spect(st, psi)
-            # return np.abs(im2d - xx)
-            return st[...,30:].sum(axis=2)
-
-        image = image.astype(np.uint8)
-        im2d_st_psi_sets = tuple((d_ch,)+shearlet_transform_spect(d_ch) \
-                                            for d_ch in cv2.split(image))
-
-        restored_im_per_chanel = tuple(__restoration(im2d, ST, Psi) \
-                                        for im2d, ST, Psi in im2d_st_psi_sets)
-        if len(restored_im_per_chanel)==1:
-            return restored_im_per_chanel[0].reshape(image.shape[:2]+(1,))
-        return cv2.merge(restored_im_per_chanel)

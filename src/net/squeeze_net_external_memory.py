@@ -72,7 +72,7 @@ class SqueezeNetExternalMemory(chainer.Chain):
     def __call__(self, x, t=None):
         self.clear()
         x.volatile = not self.train
-        t.volatile = 'auto'
+        t.volatile = 'AUTO'
 
         h = F.elu(self.conv1(x))
         h = F.max_pooling_2d(h, 3, stride=2)
@@ -91,7 +91,7 @@ class SqueezeNetExternalMemory(chainer.Chain):
         h = F.spatial_pyramid_pooling_2d(h, 3, F.MaxPooling2D)
         h = F.elu(self.conv9(h))
 
-        memory_h = chainer.Variable(h.data, volatile='auto')
+        memory_h = chainer.Variable(h.data, volatile='AUTO')
         with chainer.no_backprop_mode():
             weight, self.memory = \
                 self.apply_memory(memory_h, t, self.update_weight, self.train)

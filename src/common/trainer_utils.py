@@ -82,9 +82,12 @@ class EasyTrainer(object):
         mode_settings = importlib.import_module(self.settings_type)
         train_args = mode_settings.get_args('train')
         # load dataset
-        train_mini_batch_loader = DatasetPreProcessor(train_args)
-        test_mini_batch_loader = DatasetPreProcessor(mode_settings.get_args('test'))
-        print("---set mini_batch----------")
+        if chainer.config.user_data_set=='mnist':
+            train_mini_batch_loader, test_mini_batch_loader = \
+                chainer.datasets.get_mnist()
+        else:
+            train_mini_batch_loader = DatasetPreProcessor(train_args)
+            test_mini_batch_loader = DatasetPreProcessor(get_args('test'))
 
         if train_args.importance_sampling:
             print("importance----------")

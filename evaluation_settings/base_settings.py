@@ -6,7 +6,7 @@ import inflection
 
 
 # immortal params
-local_os_name = 'Darwin'
+local_os_name = 'Windows'
 data_root_path = './data' if platform.system()==local_os_name else '/data/naoki_shimada/sysmex'
 
 # mult_dir's key is module name
@@ -47,7 +47,6 @@ net_dict = {net_name:{'module_name':net_name, \
 image_normalize_types_dict = {'ZCA': {'method':'zca_whitening', 'opts':{'eps':1e-5}},
                              'LCN': {'method':'local_contrast_normalization', 'opts':'YUV'},
                              'GCN': {'method':'global_contrast_normalization', 'opts':None},
-                             'SLT': {'method':'shearlet_transform', 'opts':None}
                             }
 
 dic_name = 'sysm_pathological.dict'
@@ -64,7 +63,7 @@ token_args = {
 training_params = {
         'optimizer': 'RMSpropGraves',
         'lr': 1e-5,
-        'batch_size': 20,
+        'batch_size': 128,
         'epoch': 200,
         'decay_factor': 0.1,  # as lr time decay
         'decay_epoch': 50,

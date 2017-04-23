@@ -46,7 +46,7 @@ class ModLSTM(chainer.links.LSTM):
             xp = self.xp
             self.c = variable.Variable(
                 xp.zeros((batch, self.state_size), dtype=x.dtype),
-                volatile='auto')
+                volatile='AUTO')
         # self.c, y = lstm.lstm(self.c, lstm_in)
 
         c, y = lstm.lstm(self.c, lstm_in)

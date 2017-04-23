@@ -1,6 +1,5 @@
 import os, sys
 sys.path.append('./src/common/image_processor')
-sys.path.append('./src/common/text_processor')
 sys.path.append('./src/common/image_processor/feature_extractor')
 import chainer
 import cv2
@@ -9,7 +8,6 @@ np.random.seed(555)
 from contextlib import ExitStack
 import numbers
 from image_normalizer import ImageNormalizer
-from tokenizer import Tokenizer
 from feature_extractor_utils import show_image
 from cell_diameters import compute_cell_diameter
 from nucleus_diamiters import compute_nucleus_diameter
@@ -28,8 +26,6 @@ class DatasetPreProcessor(chainer.dataset.DatasetMixin):
         self.pairs = self.read_paths()
         self.counter = 0
         self.image_size_in_batch = [None, None]  # height, width
-        if args.generate_comment:
-            self.inputs_tokens = self.compute_token_ids()  # return numpy array
 
     def __len__(self):
         return len(self.pairs)
@@ -150,8 +146,6 @@ class DatasetPreProcessor(chainer.dataset.DatasetMixin):
                 dtype=np.float32)
             batch_inputs += (features, )
 
-        if self.args.generate_comment:
-            batch_inputs += (self.inputs_tokens[index], )
         return batch_inputs
 
     def color_trancefer(self, image):
@@ -326,10 +320,6 @@ class DatasetPreProcessor(chainer.dataset.DatasetMixin):
             return image.reshape(im_shape)
         else:
             return image
-
-    def compute_token_ids(self):
-        parser = Tokenizer(self.args.token_args)
-        return parser.token2id()
 
     def detect_edge(self, image):
         h, w, ch = image.shape
